@@ -11,7 +11,7 @@ const configuration = {
 
 let peerConnection;
 let localStream;
-let foreignStream;
+let remoteStream;
 
 
 async function init(constraints) {
@@ -20,10 +20,9 @@ async function init(constraints) {
     // Listen for local ICE candidates
     peerConnection.addEventListener('icecandidate', event => {
         if (event.candidate) {
-            // console.log(event.candidate);
-            document.getElementById('iceCandidates').value += 
-                event.candidate.candidate + '\t' + 
-                event.candidate.sdpMid + '\t' + 
+            document.getElementById('iceCandidates').value +=
+                event.candidate.candidate + '\t' +
+                event.candidate.sdpMid + '\t' +
                 event.candidate.sdpMLineIndex + '\n';
         }
     });
@@ -40,8 +39,14 @@ async function init(constraints) {
             console.log('PEERS CONNECTED!')
         }
     });
-    
-    
+
+    peerConnection.addEventListener('track', async (event) => {
+        [remoteStream] = event.streams;
+        document.querySelector('#remoteVideo').srcObject = remoteStream;
+    });
+
+
+
     localStream = await navigator.mediaDevices.getUserMedia(constraints);
     localStream.getTracks().forEach(track => {
         peerConnection.addTrack(track, localStream);
@@ -59,7 +64,7 @@ async function createSdpOffer() {
 }
 
 async function createSdpAnswer() {
-    const offer = document.getElementById('foreignOffer').value;
+    const offer = document.getElementById('remoteOffer').value;
 
     await peerConnection.setRemoteDescription({ type: 'offer', sdp: offer });
     const answer = await peerConnection.createAnswer();
@@ -69,18 +74,18 @@ async function createSdpAnswer() {
     console.log('SDP answer copied to clipboard');
 }
 
-async function handleForeignSdpAnswer() {
-    const answer = document.getElementById('foreignAnswer').value;
+async function handleRemoteSdpAnswer() {
+    const answer = document.getElementById('remoteAnswer').value;
     await peerConnection.setRemoteDescription({ type: 'answer', sdp: answer });
 
-    console.log('Foreign answer acknowledged by local peer');
+    console.log('Remote answer acknowledged by local peer');
 }
 
-async function handleForeignIceCandidates() {
-    const foreignIceCandidatesText = document.getElementById('foreignIceCandidates').value;
-    const foreignIceCandidatesList = foreignIceCandidatesText.split('\n').filter(candidate => candidate.trim() !== '');
-    
-    foreignIceCandidatesList.forEach(candidateLine => {
+async function handleRemoteIceCandidates() {
+    const remoteIceCandidatesText = document.getElementById('remoteIceCandidates').value;
+    const remoteIceCandidatesList = remoteIceCandidatesText.split('\n').filter(candidate => candidate.trim() !== '');
+
+    remoteIceCandidatesList.forEach(candidateLine => {
         let iceCandidateParameters = candidateLine.split('\t');
         let iceCandidateObject = {
             'candidate': iceCandidateParameters[0],

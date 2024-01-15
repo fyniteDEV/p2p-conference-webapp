@@ -9,7 +9,7 @@
 <body>
     <div id='videos'>
         <video id='localVideo' autoplay playsinline></video>
-        <video id='foreignVideo' autoplay playsinline></video>
+        <video id='remoteVideo' autoplay playsinline></video>
     </div>
 
     <div id='localOfferContainer'>
@@ -18,16 +18,16 @@
         </button>
     </div>
 
-    <div id='foreignAnswerContainer'>
-        <textarea name='answerText' id='foreignOffer' cols='50' rows='5'></textarea>
+    <div id='remoteAnswerContainer'>
+        <textarea name='answerText' id='remoteOffer' cols='50' rows='5'></textarea>
         <button id='createOffer' onclick='createSdpAnswer()'>
             Create Answer
         </button>
     </div>
 
     <div id=''>
-        <textarea name='answerText' id='foreignAnswer' cols='50' rows='5'></textarea>
-        <button id='handleAnswer' onclick='handleForeignSdpAnswer()'>
+        <textarea name='answerText' id='remoteAnswer' cols='50' rows='5'></textarea>
+        <button id='handleAnswer' onclick='handleRemoteSdpAnswer()'>
             Handle Answer
         </button>
     </div>
@@ -37,9 +37,9 @@
         <textarea name='' id='iceCandidates' cols='50' rows='10'></textarea>
     </div>
     <div id=''>
-        <textarea name='' id='foreignIceCandidates' cols='50' rows='5'></textarea>
-        <button id='handleForeignIce' onclick='handleForeignIceCandidates()'>
-            Handle foreign ICE candidates
+        <textarea name='' id='remoteIceCandidates' cols='50' rows='5'></textarea>
+        <button id='handleRemoteIce' onclick='handleRemoteIceCandidates()'>
+            Handle remote ICE candidates
         </button>
     </div>
 
