@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='style.css'>
+    <title>WebRTC</title>
+</head>
+<body>
+    <div id='videos'>
+        <video id='localVideo' autoplay playsinline></video>
+        <video id='foreignVideo' autoplay playsinline></video>
+    </div>
+
+    <div id='localOfferContainer'>
+        <button id='createOffer' onclick='createSdpOffer()'>
+            Create Offer
+        </button>
+    </div>
+
+    <div id='foreignAnswerContainer'>
+        <textarea name='answerText' id='foreignOffer' cols='50' rows='5'></textarea>
+        <button id='createOffer' onclick='createSdpAnswer()'>
+            Create Answer
+        </button>
+    </div>
+
+    <div id=''>
+        <textarea name='answerText' id='foreignAnswer' cols='50' rows='5'></textarea>
+        <button id='handleAnswer' onclick='handleForeignSdpAnswer()'>
+            Handle Answer
+        </button>
+    </div>
+
+    <div style='margin-top: 40px'>
+        <p>ICE Candidates:</p>
+        <textarea name='' id='iceCandidates' cols='50' rows='10'></textarea>
+    </div>
+    <div id=''>
+        <textarea name='' id='foreignIceCandidates' cols='50' rows='5'></textarea>
+        <button id='handleForeignIce' onclick='handleForeignIceCandidates()'>
+            Handle foreign ICE candidates
+        </button>
+    </div>
+
+
+
+    <script src='main.js'></script>
+</body>
+</html>

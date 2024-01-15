@@ -1,0 +1,12 @@
+#videos {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+video {
+    background-color: black;
+    width: 400px;
+    height: 300px;
+    display: inline-block;
+    margin-right: 20px;
+}
