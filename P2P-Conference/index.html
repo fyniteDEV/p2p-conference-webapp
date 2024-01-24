@@ -5,33 +5,37 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' href='style.css'>
     <title>WebRTC</title>
+
 </head>
 <body>
+    <script type="module" src='main.js'></script>
+
     <div id='videos'>
         <video id='localVideo' autoplay playsinline></video>
         <video id='remoteVideo' autoplay playsinline></video>
     </div>
-
+    
     <div id='localOfferContainer'>
         <button id='createOffer' onclick='createSdpOffer()'>
             Create Offer
         </button>
     </div>
-
+    
+    <!-- TODO: fix UI -->
     <div id='remoteAnswerContainer'>
-        <textarea name='answerText' id='remoteOffer' cols='50' rows='5'></textarea>
+        <!-- <textarea name='answerText' id='remoteOffer' cols='50' rows='5'></textarea> -->
         <button id='createOffer' onclick='createSdpAnswer()'>
             Create Answer
         </button>
     </div>
-
+    
     <div id=''>
-        <textarea name='answerText' id='remoteAnswer' cols='50' rows='5'></textarea>
+        <!-- <textarea name='answerText' id='remoteAnswer' cols='50' rows='5'></textarea> -->
         <button id='handleAnswer' onclick='handleRemoteSdpAnswer()'>
             Handle Answer
         </button>
     </div>
-
+    
     <div style='margin-top: 40px'>
         <p>ICE Candidates:</p>
         <textarea name='' id='iceCandidates' cols='50' rows='10'></textarea>
@@ -41,10 +45,7 @@
         <button id='handleRemoteIce' onclick='handleRemoteIceCandidates()'>
             Handle remote ICE candidates
         </button>
+        
     </div>
-
-
-
-    <script src='main.js'></script>
 </body>
 </html>

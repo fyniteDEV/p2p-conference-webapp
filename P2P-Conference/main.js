@@ -1,101 +1,159 @@
+import "https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js";
+import "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js";
+import { firebaseConfig } from './config.js';
+
+// WebRTC configuration
 const constraints = {
     'video': true,
     'audio': false
 }
-
-const configuration = {
-    'iceServers': [
-        { 'urls': 'stun:stun.l.google.com:19302', }
-    ]
-}
-
+const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302', }] }
 let peerConnection;
 let localStream;
 let remoteStream;
 
+// Connection
+let roomId = "test121321";      // index.html?room=SOMETHING123
+let uid = String(Math.floor(Math.random() * 10000000000000).toString());
 
-async function init(constraints) {
+// Firebase
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const database = firebase.firestore();
+
+
+async function init() {
     peerConnection = new RTCPeerConnection(configuration);
 
-    // Listen for local ICE candidates
-    peerConnection.addEventListener('icecandidate', event => {
-        if (event.candidate) {
-            document.getElementById('iceCandidates').value +=
-                event.candidate.candidate + '\t' +
-                event.candidate.sdpMid + '\t' +
-                event.candidate.sdpMLineIndex + '\n';
-        }
-    });
-
-    peerConnection.addEventListener('icegatheringstatechange', event => {
-        if (peerConnection.iceGatheringState == 'complete') {
-            console.log('ICE gathering finished')
-        }
-    });
-
-    peerConnection.addEventListener('connectionstatechange', event => {
-        console.log(peerConnection.connectionState);
-        if (peerConnection.connectionState === 'connected') {
-            console.log('PEERS CONNECTED!')
-        }
-    });
-
-    peerConnection.addEventListener('track', async (event) => {
-        [remoteStream] = event.streams;
-        document.querySelector('#remoteVideo').srcObject = remoteStream;
-    });
+    // Listen to firestore db for document changes
+    database.collection("calls").doc(roomId)
+        .onSnapshot((doc) => {
+            if (doc.data() != undefined && doc.data().uid != uid) {
+                if (doc.data().data.type == "offer") {
+                    console.log("Creating SDP answer");
+                    createSdpAnswer();
+                } else {
+                    console.log("Handling remote SDP answer");
+                    handleRemoteSdpAnswer();
+                }
+            }
+        });
 
 
 
+    // Local media
     localStream = await navigator.mediaDevices.getUserMedia(constraints);
     localStream.getTracks().forEach(track => {
         peerConnection.addTrack(track, localStream);
     });
-
     document.querySelector('video#localVideo').srcObject = localStream;
+
+    // Remote media
+    peerConnection.addEventListener('track', async (event) => {
+        [remoteStream] = event.streams;
+        document.querySelector('#remoteVideo').srcObject = remoteStream;
+    });
 }
 
-async function createSdpOffer() {
+window.createSdpOffer = async function () {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
+    const iceCandidates = await waitForIceGatheringComplete();
 
-    navigator.clipboard.writeText(offer.sdp);
-    console.log('SDP offer copied to clipboard')
+    database.collection("calls").doc(roomId).set({
+        uid: uid,
+        data: offer,
+        ice: iceCandidates
+    });
+
+    console.log("SDP offer and ICE sent to database");
 }
 
 async function createSdpAnswer() {
-    const offer = document.getElementById('remoteOffer').value;
+    let remoteOffer;
 
-    await peerConnection.setRemoteDescription({ type: 'offer', sdp: offer });
+    // Read remote SDP offer
+    let docRef = database.collection("calls").doc(roomId);
+    await docRef.get().then((doc) => {
+        if (doc.exists) {
+            remoteOffer = doc.data().data.sdp;
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+
+    // Create SDP answer
+    await peerConnection.setRemoteDescription({ type: 'offer', sdp: remoteOffer });
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
+    const iceCandidates = await waitForIceGatheringComplete();
 
-    navigator.clipboard.writeText(answer.sdp);
-    console.log('SDP answer copied to clipboard');
+    database.collection("calls").doc(roomId).set({
+        uid: uid,
+        data: answer,
+        ice: iceCandidates
+    });
+    console.log("SDP answer and ICE sent to database");
 }
 
 async function handleRemoteSdpAnswer() {
-    const answer = document.getElementById('remoteAnswer').value;
-    await peerConnection.setRemoteDescription({ type: 'answer', sdp: answer });
+    let remoteAnswer;
+    let remoteIceCandidates;
 
+    let docRef = database.collection("calls").doc(roomId);
+    await docRef.get().then((doc) => {
+        if (doc.exists) {
+            remoteAnswer = doc.data().data.sdp;
+            remoteIceCandidates = doc.data().ice.candidates;
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+
+    await peerConnection.setRemoteDescription({ type: 'answer', sdp: remoteAnswer });
+    await handleRemoteIceCandidates(remoteIceCandidates);
     console.log('Remote answer acknowledged by local peer');
 }
 
-async function handleRemoteIceCandidates() {
-    const remoteIceCandidatesText = document.getElementById('remoteIceCandidates').value;
-    const remoteIceCandidatesList = remoteIceCandidatesText.split('\n').filter(candidate => candidate.trim() !== '');
-
-    remoteIceCandidatesList.forEach(candidateLine => {
-        let iceCandidateParameters = candidateLine.split('\t');
-        let iceCandidateObject = {
-            'candidate': iceCandidateParameters[0],
-            'sdpMid': iceCandidateParameters[1],
-            'sdpMLineIndex': iceCandidateParameters[2]
+function waitForIceGatheringComplete() {
+    return new Promise(resolve => {
+        var ice = {
+            candidates: [{}]
         };
 
+        const candidateHandler = event => {
+            if (event.candidate) {
+                ice.candidates.push({
+                    candidate: event.candidate.candidate,
+                    sdpMid: event.candidate.sdpMid,
+                    sdpMLineIndex: event.candidate.sdpMLineIndex
+                });
+            }
+        };
+
+        const stateChangeHandler = () => {
+            if (peerConnection.iceGatheringState === "complete") {
+                peerConnection.removeEventListener("icecandidate", candidateHandler);
+                peerConnection.removeEventListener("icegatheringstatechange", stateChangeHandler);
+                console.log("ICE gathering finished");
+                resolve(ice);
+            }
+        };
+
+        peerConnection.addEventListener("icecandidate", candidateHandler)
+        peerConnection.addEventListener("icegatheringstatechange", stateChangeHandler);
+    })
+}
+
+async function handleRemoteIceCandidates(remoteIceCandidates) {
+    remoteIceCandidates.forEach(candidate => {
+        // TODO: fix error on empty candidate: "TypeError: Either sdpMid or sdpMLineIndex must be specified"
         try {
-            peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidateObject));
-            console.log('ICE candidate added: ' + iceCandidateObject.candidate);
+            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+            console.log('ICE candidate added: ' + candidate.candidate);
         } catch (e) {
             console.log('Error adding recieved ICE candidate', e);
         }
@@ -104,4 +162,7 @@ async function handleRemoteIceCandidates() {
 
 
 
-init(constraints);
+
+
+
+init();
