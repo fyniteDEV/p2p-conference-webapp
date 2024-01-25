@@ -13,7 +13,7 @@ let localStream;
 let remoteStream;
 
 // Connection
-let roomId = "test121321";      // index.html?room=SOMETHING123
+let roomId = "test11213a2211";      // index.html?room=SOMETHING123
 let uid = String(Math.floor(Math.random() * 10000000000000).toString());
 
 // Firebase
@@ -152,9 +152,13 @@ async function handleRemoteIceCandidates(remoteIceCandidates) {
     remoteIceCandidates.forEach(candidate => {
         // TODO: fix error on empty candidate: "TypeError: Either sdpMid or sdpMLineIndex must be specified"
         try {
-            peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-            console.log('ICE candidate added: ' + candidate.candidate);
+            if (candidate.candidate != undefined) {
+                // console.log(candidate);
+                peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+                console.log('ICE candidate added: ' + candidate.candidate);
+            }
         } catch (e) {
+            console.log(candidate);
             console.log('Error adding recieved ICE candidate', e);
         }
     });
@@ -165,4 +169,5 @@ async function handleRemoteIceCandidates(remoteIceCandidates) {
 
 
 
+roomId = "asdasda1231sAD"
 init();

@@ -10,42 +10,29 @@
 <body>
     <script type="module" src='main.js'></script>
 
-    <div id='videos'>
-        <video id='localVideo' autoplay playsinline></video>
-        <video id='remoteVideo' autoplay playsinline></video>
+    <div id="container">
+        <div id='videos'>
+            <video id='localVideo' autoplay playsinline></video>
+            <video id='remoteVideo' autoplay playsinline></video>
+        </div>
+    
+        <div id="interface">
+            <!-- <div>
+                <p>Chats</p>
+            </div>
+            
+            <div id="newMessageDiv">
+                <input type="text" name="" id="">
+            </div> -->
+
+            <div id="buttons">
+                <button id='createOffer' onclick='createSdpOffer()'>
+                    Start call
+                </button>
+                <button id="stopCall">Stop</button>
+            </div>
+        </div>
     </div>
     
-    <div id='localOfferContainer'>
-        <button id='createOffer' onclick='createSdpOffer()'>
-            Create Offer
-        </button>
-    </div>
-    
-    <!-- TODO: fix UI -->
-    <div id='remoteAnswerContainer'>
-        <!-- <textarea name='answerText' id='remoteOffer' cols='50' rows='5'></textarea> -->
-        <button id='createOffer' onclick='createSdpAnswer()'>
-            Create Answer
-        </button>
-    </div>
-    
-    <div id=''>
-        <!-- <textarea name='answerText' id='remoteAnswer' cols='50' rows='5'></textarea> -->
-        <button id='handleAnswer' onclick='handleRemoteSdpAnswer()'>
-            Handle Answer
-        </button>
-    </div>
-    
-    <div style='margin-top: 40px'>
-        <p>ICE Candidates:</p>
-        <textarea name='' id='iceCandidates' cols='50' rows='10'></textarea>
-    </div>
-    <div id=''>
-        <textarea name='' id='remoteIceCandidates' cols='50' rows='5'></textarea>
-        <button id='handleRemoteIce' onclick='handleRemoteIceCandidates()'>
-            Handle remote ICE candidates
-        </button>
-        
-    </div>
 </body>
 </html>

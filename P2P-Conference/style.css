@@ -1,12 +1,31 @@
+/* https://dribbble.com/shots/23122923-Omegle-ReDesign */
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#container {
+    display: flex;
+    align-content: flex-start;
+}
+
 #videos {
-    margin-right: auto;
-    margin-left: auto;
+    display: flex;
+    gap: 0vw;
+    flex-direction: column;
+    justify-content: center;
+    width: 60vw;
+    
 }
 
 video {
     background-color: black;
-    width: 400px;
-    height: 300px;
-    display: inline-block;
-    margin-right: 20px;
+    width: 490px;
+    height: 50vh;
+}
+
+#interface {
+    /* flex-basis: 100%; */
 }
