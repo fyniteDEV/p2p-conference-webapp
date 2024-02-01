@@ -1,38 +1,68 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' href='style.css'>
+    <script src="https://kit.fontawesome.com/9d90fa0f5b.js" crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="fontawesome-free-6.5.1-web/css/fontawesome.min.css"> -->
     <title>WebRTC</title>
 
 </head>
+
 <body>
     <script type="module" src='main.js'></script>
 
     <div id="container">
-        <div id='videos'>
-            <video id='localVideo' autoplay playsinline></video>
-            <video id='remoteVideo' autoplay playsinline></video>
-        </div>
-    
-        <div id="interface">
-            <!-- <div>
-                <p>Chats</p>
-            </div>
-            
-            <div id="newMessageDiv">
-                <input type="text" name="" id="">
-            </div> -->
+        <!-- <div id='videos'> -->
+        <video id='localVideo' autoplay playsinline></video>
+        <video id='remoteVideo' autoplay playsinline></video>
+        <!-- </div> -->
 
-            <div id="buttons">
-                <button id='createOffer' onclick='createSdpOffer()'>
-                    Start call
-                </button>
-                <button id="stopCall">Stop</button>
+        <div id="interface">
+            <div id="chat-title-container">
+                <p id="chat-title-text">Chats</p>
+            </div>
+
+            <div id="messages-container">
+                <div class="received-msg-container chat-message-container">
+                    <p>Remote message</p>
+                </div>
+                <div class="local-msg-container chat-message-container">
+                    <p>Local message</p>
+                </div>
+                <div class="local-msg-container chat-message-container">
+                    <p>Culpa beatae aperiam id. Iste sit ab impedit sunt nisi error quia. Sed eligendi et molestiae sit consequatur rerum et fugiat. Voluptatum perspiciatis ea aut ipsum ea assumenda quo.</p>
+                </div>
+                <div class="received-msg-container chat-message-container">
+                    <p>Dolor qui dolores et consequatur dolor sint. Iste omnis odit est maxime ut in maxime. Omnis dignissimos et incidunt a repellendus ad tenetur ea.Dolor qui dolores et consequatur dolor sint. Iste omnis odit est maxime ut in maxime. Omnis dignissimos et incidunt a repellendus ad tenetur ea.Dolor qui dolores et consequatur dolor sint. Iste omnis odit est maxime ut in maxime. Omnis dignissimos et incidunt a repellendus ad tenetur ea.Dolor qui dolores et consequatur dolor sint. Iste omnis odit est maxime ut in maxime. Omnis dignissimos et incidunt a repellendus ad tenetur ea.</p>
+                </div>
+            </div>
+
+            <div id="new-msg-and-btns">
+                <form id="new-msg-form">
+                    <input type="text" name="" id="new-msg-input" placeholder="Type something...">
+                    <button type="button" id="send-msg-btn" onclick="">
+                        <i class="fa-regular fa-paper-plane fa-lg"></i>
+                    </button>
+                </form>
+    
+                <div id="control-btns-container">
+                    <button id="mic-control-btn" class="ctrl-btn">
+                        <i class="fa-solid fa-microphone fa-lg"></i>
+                    </button>
+                    <button id="camera-control-btn" class="ctrl-btn">
+                        <i class="fa-solid fa-video fa-lg"></i>
+                    </button>
+                    <button id="end-call-btn" class="ctrl-btn" onclick='createSdpOffer()'>
+                        <i class="fa-solid fa-phone-flip fa-rotate-by fa-lg" style="--fa-rotate-angle: -136deg;"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    
+
 </body>
+
 </html>

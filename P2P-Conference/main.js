@@ -13,7 +13,7 @@ let localStream;
 let remoteStream;
 
 // Connection
-let roomId = "test11213a2211";      // index.html?room=SOMETHING123
+let roomId;      // index.html?room=SOMETHING123
 let uid = String(Math.floor(Math.random() * 10000000000000).toString());
 
 // Firebase
@@ -169,5 +169,5 @@ async function handleRemoteIceCandidates(remoteIceCandidates) {
 
 
 
-roomId = "asdasda1231sAD"
+roomId = "test__"
 init();
