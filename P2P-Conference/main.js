@@ -9,6 +9,7 @@ const constraints = {
 }
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302', }] }
 let peerConnection;
+let dataChannel;;
 let localStream;
 let remoteStream;
 
@@ -23,6 +24,7 @@ const database = firebase.firestore();
 
 async function init() {
     peerConnection = new RTCPeerConnection(configuration);
+    dataChannel = peerConnection.createDataChannel("myChannel");
 
     // Listen to firestore db for document changes
     database.collection("calls").doc(roomId)
@@ -39,6 +41,36 @@ async function init() {
         });
 
 
+    peerConnection.addEventListener('connectionstatechange', event => {
+        if (peerConnection.connectionState === 'connected') {
+            console.log("CONNECTED")
+        }
+    });
+
+
+    peerConnection.addEventListener('datachannel', event => {
+        dataChannel = event.channel;
+        console.log("DATA CHANNEL RECEIVED")
+    });
+
+    dataChannel.addEventListener("open", (event) => {
+        console.log("DATA CHANNEL OPEN")
+    });
+
+    dataChannel.addEventListener("close", (event) => {
+        console.log("DATA CHANNEL CLOSED")
+    });
+
+    dataChannel.addEventListener("error", (event) => {
+        console.log("DATA CHANNEL ERROR")
+    });
+
+    dataChannel.addEventListener('message', event => {
+        createMessageBox(event.data, false);
+    });
+
+
+
 
     // Local media
     localStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -53,6 +85,9 @@ async function init() {
         document.querySelector('#remoteVideo').srcObject = remoteStream;
     });
 }
+
+
+// --- SDP messages ---
 
 window.createSdpOffer = async function () {
     const offer = await peerConnection.createOffer();
@@ -118,6 +153,9 @@ async function handleRemoteSdpAnswer() {
     console.log('Remote answer acknowledged by local peer');
 }
 
+
+// --- Handle ICE candidates ---
+
 function waitForIceGatheringComplete() {
     return new Promise(resolve => {
         var ice = {
@@ -165,9 +203,44 @@ async function handleRemoteIceCandidates(remoteIceCandidates) {
 }
 
 
+// --- Chat message ---
+
+window.sendMessage = function () {
+    const message = document.getElementById("new-msg-input").value;
+    dataChannel.send(message);
+    console.log("Message sent: ", message);
+    createMessageBox(message, true);
+
+    document.getElementById("new-msg-input").value = "";
+}
+
+window.newMsgInputButtonPressed = function(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function createMessageBox(message, isLocal) {
+    let msgContainerClass;
+    if (isLocal) {
+        msgContainerClass = "local-msg-container chat-message-container";
+    } else {
+        msgContainerClass = "received-msg-container chat-message-container";
+    }
+
+    let msgText = document.createElement("p");
+    msgText.innerHTML = message;
+
+    let msgContainer = document.createElement("div");
+    msgContainer.className = msgContainerClass;
+    msgContainer.appendChild(msgText);
+
+    const chatBoardContainer = document.getElementById("messages-container");
+    chatBoardContainer.appendChild(msgContainer);    
+}
 
 
 
 
-roomId = "test__"
+roomId = "adadasdas"
 init();

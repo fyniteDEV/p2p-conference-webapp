@@ -153,14 +153,15 @@ button {
 }
 
 .chat-message-container {
-    background-color: white;
     width: fit-content;
-    padding: 8px;
+    padding: 10px;
     margin: 10px 5px;
+    max-width: 90%;
+    text-align: justify;
 }
 
 .received-msg-container {
-    border-radius: 5px 15px 15px 5px;
+    border-radius: 0px 15px 15px 0px;
     background-color: #70a9a1;
 }
 
@@ -169,7 +170,7 @@ button {
 }
 
 .local-msg-container {
-    border-radius: 15px 5px 5px 15px;
+    border-radius: 15px 0px 0px 15px;
     background-color: #bf5558;
     margin-left: auto;
 }
