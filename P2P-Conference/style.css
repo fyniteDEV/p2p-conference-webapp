@@ -63,11 +63,6 @@ video {
     padding: 10px;
 }
 
-#messages-container {
-    /* height: 550px; */
-    flex-grow: 2;
-}
-
 
 #new-msg-and-btns {
     /* background-color: #515932; */
@@ -132,6 +127,7 @@ button {
 #camera-control-btn {
     background-color: #5c61ed;
 }
+
 #mic-control-btn:hover,
 #camera-control-btn:hover {
     background-color: #757af0;
@@ -149,7 +145,10 @@ button {
 
 /* CHAT MESSAGES */
 #messages-container {
+    flex-grow: 2;
     padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .chat-message-container {
@@ -166,7 +165,7 @@ button {
 }
 
 .local-msg-container p {
-    text-align: end;
+    direction: rtl;
 }
 
 .local-msg-container {

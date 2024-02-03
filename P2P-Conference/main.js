@@ -67,6 +67,9 @@ async function init() {
 
     dataChannel.addEventListener('message', event => {
         createMessageBox(event.data, false);
+
+        const messagesContainer = document.getElementById("messages-container");
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 
 
@@ -169,6 +172,7 @@ function waitForIceGatheringComplete() {
                     sdpMid: event.candidate.sdpMid,
                     sdpMLineIndex: event.candidate.sdpMLineIndex
                 });
+                // console.log(ice.candidates)
             }
         };
 
@@ -207,14 +211,23 @@ async function handleRemoteIceCandidates(remoteIceCandidates) {
 
 window.sendMessage = function () {
     const message = document.getElementById("new-msg-input").value;
+
+    // If it's nothing but whitespace then don't send
+    if (/^\s*$/.test(message)) {
+        return;
+    }
+
     dataChannel.send(message);
     console.log("Message sent: ", message);
     createMessageBox(message, true);
 
+    const messagesContainer = document.getElementById("messages-container");
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
     document.getElementById("new-msg-input").value = "";
 }
 
-window.newMsgInputButtonPressed = function(event) {
+window.newMsgInputButtonPressed = function (event) {
     if (event.key === "Enter") {
         sendMessage();
     }
@@ -236,11 +249,11 @@ function createMessageBox(message, isLocal) {
     msgContainer.appendChild(msgText);
 
     const chatBoardContainer = document.getElementById("messages-container");
-    chatBoardContainer.appendChild(msgContainer);    
+    chatBoardContainer.appendChild(msgContainer);
 }
 
 
 
 
-roomId = "adadasdas"
+roomId = "--12-"
 init();
