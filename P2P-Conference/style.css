@@ -17,14 +17,6 @@ p {
     grid-template-columns: auto auto;
 }
 
-/* #videos {
-    display: flex;
-    gap: 0vw;
-    flex-direction: column;
-    justify-content: center;
-    width: 60vw;
-} */
-
 video {
     background-color: black;
     width: 32vw;
@@ -48,7 +40,6 @@ video {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    /* gap: 20px; */
 }
 
 #chat-title-text {
@@ -65,7 +56,6 @@ video {
 
 
 #new-msg-and-btns {
-    /* background-color: #515932; */
     border-top: 1px #444 solid;
     padding-top: 10px;
 }
@@ -96,7 +86,7 @@ video {
     border: none;
 }
 
-button {
+.interface-btn {
     width: 45px;
     height: 45px;
     border: none;
@@ -172,4 +162,86 @@ button {
     border-radius: 15px 0px 0px 15px;
     background-color: #bf5558;
     margin-left: auto;
+}
+
+/* LOBBY */
+#room-select-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50px;
+    border: 2px solid #5c61ed;
+    background-color: #22242c;
+    padding: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+    box-shadow: rgba(92, 97, 237, 0.4) -5px 5px, rgba(92, 97, 237, 0.3) -10px 10px, rgba(92, 97, 237, 0.2) -15px 15px, rgba(92, 97, 237, 0.1) -20px 20px, rgba(92, 97, 237, 0.05) -25px 25px;
+}
+
+#join-room-form {
+    display: flex;
+    flex-direction: row;
+    border-radius: 50px;
+    padding: 1px;
+    background-color: #43444e;
+    margin: auto auto;
+    width: 100%;
+}
+
+#join-room-input {
+    flex-grow: 2;
+    border: none;
+    border-radius: 50px;
+    padding: 5px 15px;
+    font-size: 15px;
+    background-color: #43444e;
+    color: white;
+}
+#join-room-input:focus {
+    outline: none;
+    border: none;
+}
+
+#join-room-btn {
+    background-color: #5c61ed;
+}
+#join-room-btn:active {
+    background-color: #757af0;
+}
+
+#create-room-container {
+    text-align: center;
+    width: 60%;
+    margin: auto;
+}
+
+#create-room-btn {
+    border-radius: 50px;
+    border: none;
+    background-color: #5c61ed;
+    width: 100%;
+    font-size: 15px;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+#create-room-btn:hover {
+    cursor: pointer;
+}
+#create-room-btn:active {
+    background-color: #757af0;
+}
+
+#create-room-icon {
+    float: right;
+    padding: 3px;
+}
+
+#join-create-room-divider {
+    color: #bdbdc4;
 }
