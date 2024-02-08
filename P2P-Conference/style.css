@@ -209,8 +209,11 @@ video {
 #join-room-btn {
     background-color: #5c61ed;
 }
-#join-room-btn:active {
+#join-room-btn:hover {
     background-color: #757af0;
+}
+#join-room-btn:active {
+    background-color: #5c61ed;
 }
 
 #create-room-container {
@@ -232,9 +235,10 @@ video {
 }
 #create-room-btn:hover {
     cursor: pointer;
+    background-color: #757af0;
 }
 #create-room-btn:active {
-    background-color: #757af0;
+    background-color: #5c61ed !important;
 }
 
 #create-room-icon {

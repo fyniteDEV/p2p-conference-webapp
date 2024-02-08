@@ -1,4 +1,3 @@
-<!-- https://dribbble.com/shots/10854515-Synify-Create-room -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,19 +9,19 @@
     <script src="https://kit.fontawesome.com/9d90fa0f5b.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body> 
     <div id="room-select-container">
         <form id="join-room-form" onsubmit="return false;" autocomplete="off">
             <input type="text" name="" id="join-room-input" onkeypress="" placeholder="Join a room">
-            <button type="button" id="join-room-btn" class="interface-btn" onclick="">
+            <button type="button" id="join-room-btn" class="interface-btn" onclick="joinRoom()">
                 <i class="fa-solid fa-right-to-bracket fa-lg"></i>
             </button>
         </form>
-
+        
         <p id="join-create-room-divider">or</p>
-
+        
         <div id="create-room-container">
-            <button id="create-room-btn">
+            <button id="create-room-btn" onclick="createRoom()">
                 Create a room
                 <i class="fa-solid fa-shuffle" id="create-room-icon"></i>
             </button>
@@ -30,4 +29,6 @@
     </div>
 </body>
 
+
+<script src="lobby.js"></script>
 </html>
