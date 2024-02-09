@@ -7,7 +7,7 @@ const database = firebase.firestore();
 
 window.createRoom = function() {
     const roomId = String(Math.floor(Math.random() * 1000000000).toString());
-    window.location.href = `index.html?room=${roomId}`;
+    window.location.href = `room.html?room=${roomId}`;
 }
 
 window.joinRoom = function() {
@@ -24,7 +24,7 @@ window.joinRoom = function() {
     var docRef = database.collection("calls").doc(room);
     docRef.get().then((doc) => {
         if (doc.exists) {
-            window.location.href = `index.html?room=${room}`;
+            window.location.href = `room.html?room=${room}`;
         } else {
             alert("Room doesn't exist");
             return;
