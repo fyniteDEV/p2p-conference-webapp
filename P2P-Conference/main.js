@@ -14,7 +14,7 @@ let localStream;
 let remoteStream;
 
 // Connection
-let roomId;      // index.html?room=SOMETHING123
+let roomId;
 let uid = String(Math.floor(Math.random() * 10000000000000).toString());
 
 // Firebase
@@ -23,20 +23,55 @@ const database = firebase.firestore();
 
 
 async function init() {
+    const urlParams = new URLSearchParams(window.location.search);
+    roomId = urlParams.get("room");
+
     peerConnection = new RTCPeerConnection(configuration);
     dataChannel = peerConnection.createDataChannel("myChannel");
+
+
+    // Local media
+    localStream = await navigator.mediaDevices.getUserMedia(constraints);
+    localStream.getTracks().forEach(track => {
+        peerConnection.addTrack(track, localStream);
+    });
+    document.querySelector('video#localVideo').srcObject = localStream;
+
+    // Remote media
+    peerConnection.addEventListener('track', async (event) => {
+        [remoteStream] = event.streams;
+        document.querySelector('#remoteVideo').srcObject = remoteStream;
+    });
+
 
     // Listen to firestore db for document changes
     database.collection("calls").doc(roomId)
         .onSnapshot((doc) => {
-            if (doc.data() != undefined && doc.data().uid != uid) {
-                if (doc.data().data.type == "offer") {
-                    console.log("Creating SDP answer");
-                    createSdpAnswer();
-                } else {
-                    console.log("Handling remote SDP answer");
-                    handleRemoteSdpAnswer();
+            const data = doc.data();
+
+            // If document exists
+            if (data) {
+                if (data.uid != uid && data.isInitMessage) {
+                    createSdpOffer();
+                } else if (data.uid != uid) {
+                    if (data.data.type == "offer") {
+                        console.log("Creating SDP answer");
+                        createSdpAnswer();
+                    } else {
+                        console.log("Handling remote SDP answer");
+                        handleRemoteSdpAnswer();
+                    }
                 }
+            } else {
+                // Create init message
+                database.collection("calls").doc(roomId).set({
+                    uid: uid,
+                    data: null,
+                    ice: null,
+                    isInitMessage: true
+                }).then(
+                    console.log("SENT TO ", roomId)
+                );
             }
         });
 
@@ -71,28 +106,12 @@ async function init() {
         const messagesContainer = document.getElementById("messages-container");
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
-
-
-
-
-    // Local media
-    localStream = await navigator.mediaDevices.getUserMedia(constraints);
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-    document.querySelector('video#localVideo').srcObject = localStream;
-
-    // Remote media
-    peerConnection.addEventListener('track', async (event) => {
-        [remoteStream] = event.streams;
-        document.querySelector('#remoteVideo').srcObject = remoteStream;
-    });
 }
 
 
 // --- SDP messages ---
 
-window.createSdpOffer = async function () {
+async function createSdpOffer() {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     const iceCandidates = await waitForIceGatheringComplete();
@@ -100,7 +119,8 @@ window.createSdpOffer = async function () {
     database.collection("calls").doc(roomId).set({
         uid: uid,
         data: offer,
-        ice: iceCandidates
+        ice: iceCandidates,
+        isInitMessage: false
     });
 
     console.log("SDP offer and ICE sent to database");
@@ -130,7 +150,8 @@ async function createSdpAnswer() {
     database.collection("calls").doc(roomId).set({
         uid: uid,
         data: answer,
-        ice: iceCandidates
+        ice: iceCandidates,
+        isInitMessage: false
     });
     console.log("SDP answer and ICE sent to database");
 }
@@ -255,5 +276,4 @@ function createMessageBox(message, isLocal) {
 
 
 
-roomId = "--12-"
 init();
