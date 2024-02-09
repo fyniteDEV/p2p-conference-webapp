@@ -1,54 +1,34 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='stylesheet' href='style.css'>
-    <script src="https://kit.fontawesome.com/9d90fa0f5b.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>WebRTC</title>
-
+    <script src="https://kit.fontawesome.com/9d90fa0f5b.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <script type="module" src='main.js'></script>
-
-    <div id="container">
-        <video id='localVideo' autoplay playsinline></video>
-        <video id='remoteVideo' autoplay playsinline></video>
-
-        <div id="interface">
-            <div id="chat-title-container">
-                <p id="chat-title-text">Chats</p>
-            </div>
-
-            <div id="messages-container">
-                <!-- Chat messages -->
-            </div>
-
-            <div id="new-msg-and-btns">
-                <form id="new-msg-form" onsubmit="return false;" autocomplete="off">
-                    <input type="text" name="" id="new-msg-input" onkeypress="newMsgInputButtonPressed(event)" placeholder="Type something...">
-                    <button type="button" id="send-msg-btn" class="interface-btn" onclick="sendMessage()">
-                        <i class="fa-regular fa-paper-plane fa-lg"></i>
-                    </button>
-                </form>
-    
-                <div id="control-btns-container">
-                    <button id="mic-control-btn" class="ctrl-btn interface-btn">
-                        <i class="fa-solid fa-microphone fa-lg"></i>
-                    </button>
-                    <button id="camera-control-btn" class="ctrl-btn interface-btn">
-                        <i class="fa-solid fa-video fa-lg"></i>
-                    </button>
-                    <button id="end-call-btn" class="ctrl-btn interface-btn" onclick="">
-                        <i class="fa-solid fa-phone-flip fa-rotate-by fa-lg" style="--fa-rotate-angle: -136deg;"></i>
-                    </button>
-                </div>
-            </div>
+<body> 
+    <div id="room-select-container">
+        <form id="join-room-form" onsubmit="return false;" autocomplete="off">
+            <input type="text" name="" id="join-room-input" onkeypress="" placeholder="Join a room">
+            <button type="button" id="join-room-btn" class="interface-btn" onclick="joinRoom()">
+                <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+            </button>
+        </form>
+        
+        <p id="join-create-room-divider">or</p>
+        
+        <div id="create-room-container">
+            <button id="create-room-btn" onclick="createRoom()">
+                Create a room
+                <i class="fa-solid fa-shuffle" id="create-room-icon"></i>
+            </button>
         </div>
     </div>
-
 </body>
 
+
+<script src="lobby.js" type="module"></script>
 </html>

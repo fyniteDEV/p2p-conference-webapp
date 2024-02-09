@@ -213,10 +213,8 @@ function waitForIceGatheringComplete() {
 
 async function handleRemoteIceCandidates(remoteIceCandidates) {
     remoteIceCandidates.forEach(candidate => {
-        // TODO: fix error on empty candidate: "TypeError: Either sdpMid or sdpMLineIndex must be specified"
         try {
-            if (candidate.candidate != undefined) {
-                // console.log(candidate);
+            if (candidate.candidate) {
                 peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
                 console.log('ICE candidate added: ' + candidate.candidate);
             }
