@@ -25,6 +25,7 @@ const database = firebase.firestore();
 async function init() {
     const urlParams = new URLSearchParams(window.location.search);
     roomId = urlParams.get("room");
+    document.getElementById("room-id").innerHTML = `room ID:    ${roomId}`;
 
     peerConnection = new RTCPeerConnection(configuration);
     dataChannel = peerConnection.createDataChannel("myChannel");
@@ -72,13 +73,15 @@ async function init() {
                 }).then(
                     console.log("SENT TO ", roomId)
                 );
+                document.getElementById("connection-info-msg").innerHTML = "waiting for remote peer to connect...";
             }
         });
 
 
     peerConnection.addEventListener('connectionstatechange', event => {
         if (peerConnection.connectionState === 'connected') {
-            console.log("CONNECTED")
+            console.log("CONNECTED");
+            document.getElementById("connection-info-msg").innerHTML = "peers connected";
         }
     });
 
@@ -123,6 +126,7 @@ async function createSdpOffer() {
         isInitMessage: false
     });
 
+    document.getElementById("connection-info-msg").innerHTML = "connecting..."
     console.log("SDP offer and ICE sent to database");
 }
 
@@ -153,6 +157,8 @@ async function createSdpAnswer() {
         ice: iceCandidates,
         isInitMessage: false
     });
+
+    document.getElementById("connection-info-msg").innerHTML = "connecting..."
     console.log("SDP answer and ICE sent to database");
 }
 

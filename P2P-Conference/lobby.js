@@ -32,7 +32,4 @@ window.joinRoom = function() {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    
-    // TODO: rename html files
-
 }

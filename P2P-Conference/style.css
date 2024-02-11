@@ -54,6 +54,15 @@ video {
     padding: 10px;
 }
 
+.upper-info {
+    display: inline-block;
+}
+
+#room-id {
+    float: right;
+    color: #eaf2ef;
+}
+
 
 #new-msg-and-btns {
     border-top: 1px #444 solid;
@@ -162,6 +171,15 @@ video {
     border-radius: 15px 0px 0px 15px;
     background-color: #bf5558;
     margin-left: auto;
+}
+
+#connection-info-container {
+    text-align: center;
+}
+
+#connection-info-msg {
+    margin-left: auto;
+    color: #bdbdc4;
 }
 
 /* LOBBY */
