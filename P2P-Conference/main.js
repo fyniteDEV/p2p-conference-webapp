@@ -5,13 +5,16 @@ import { firebaseConfig } from './config.js';
 // WebRTC configuration
 const constraints = {
     'video': true,
-    'audio': false
+    'audio': true
 }
 const configuration = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302', }] }
 let peerConnection;
-let dataChannel;;
+let dataChannel;
 let localStream;
 let remoteStream;
+
+let localVideoTrackEnabled;
+let localAudioTrackEnabled;
 
 // Connection
 let roomId;
@@ -37,6 +40,8 @@ async function init() {
         peerConnection.addTrack(track, localStream);
     });
     document.querySelector('video#localVideo').srcObject = localStream;
+    localVideoTrackEnabled = true;
+    localAudioTrackEnabled = true;
 
     // Remote media
     peerConnection.addEventListener('track', async (event) => {
@@ -278,6 +283,38 @@ function createMessageBox(message, isLocal) {
 }
 
 
+// --- Control buttons ---
+window.toggleCamera = function () {
+    const videoTrack = localStream.getVideoTracks()[0];
+
+    if (localVideoTrackEnabled) {
+        videoTrack.enabled = false;
+        localVideoTrackEnabled = false;
+        document.getElementById("camera-icon").className = "fa-solid fa-video-slash fa-lg"
+    } else {
+        videoTrack.enabled = true;
+        localVideoTrackEnabled = true;
+        document.getElementById("camera-icon").className = "fa-solid fa-video fa-lg"
+    }
+}
+
+window.toggleMicrophone = function() {
+    const audioTrack = localStream.getAudioTracks()[0];
+    
+    if (localAudioTrackEnabled) {
+        audioTrack.enabled = false;
+        localAudioTrackEnabled = false;
+        document.getElementById("audio-icon").className = "fa-solid fa-microphone-slash fa-lg";
+    } else {
+        audioTrack.enabled = true;
+        localAudioTrackEnabled = true;
+        document.getElementById("audio-icon").className = "fa-solid fa-microphone fa-lg";
+    }
+}
+
+window.endCall = function() {
+    console.log("THE END HAS ARRRIVEDDDDDD");
+}
 
 
 init();

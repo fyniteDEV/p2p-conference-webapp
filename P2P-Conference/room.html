@@ -41,13 +41,13 @@
                 </form>
     
                 <div id="control-btns-container">
-                    <button id="mic-control-btn" class="ctrl-btn interface-btn">
-                        <i class="fa-solid fa-microphone fa-lg"></i>
+                    <button id="mic-control-btn" class="ctrl-btn interface-btn" onclick="toggleMicrophone()">
+                        <i id="audio-icon" class="fa-solid fa-microphone fa-lg"></i>
                     </button>
-                    <button id="camera-control-btn" class="ctrl-btn interface-btn">
-                        <i class="fa-solid fa-video fa-lg"></i>
+                    <button id="camera-control-btn" class="ctrl-btn interface-btn" onclick="toggleCamera()">
+                        <i id="camera-icon" class="fa-solid fa-video fa-lg"></i>
                     </button>
-                    <button id="end-call-btn" class="ctrl-btn interface-btn" onclick="">
+                    <button id="end-call-btn" class="ctrl-btn interface-btn" onclick="endCall()">
                         <i class="fa-solid fa-phone-flip fa-rotate-by fa-lg" style="--fa-rotate-angle: -136deg;"></i>
                     </button>
                 </div>
