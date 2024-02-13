@@ -83,8 +83,8 @@ async function init() {
         });
 
 
-    peerConnection.addEventListener('connectionstatechange', event => {
-        if (peerConnection.connectionState === 'connected') {
+    peerConnection.addEventListener("connectionstatechange", event => {
+        if (peerConnection.connectionState === "connected") {
             console.log("CONNECTED");
             document.getElementById("connection-info-msg").innerHTML = "peers connected";
         }
@@ -102,6 +102,7 @@ async function init() {
 
     dataChannel.addEventListener("close", (event) => {
         console.log("DATA CHANNEL CLOSED")
+        document.getElementById("connection-info-msg").innerHTML = "call finished";
     });
 
     dataChannel.addEventListener("error", (event) => {
@@ -298,9 +299,9 @@ window.toggleCamera = function () {
     }
 }
 
-window.toggleMicrophone = function() {
+window.toggleMicrophone = function () {
     const audioTrack = localStream.getAudioTracks()[0];
-    
+
     if (localAudioTrackEnabled) {
         audioTrack.enabled = false;
         localAudioTrackEnabled = false;
@@ -312,8 +313,14 @@ window.toggleMicrophone = function() {
     }
 }
 
-window.endCall = function() {
-    console.log("THE END HAS ARRRIVEDDDDDD");
+window.endCall = async function () {
+    const videoTrack = localStream.getVideoTracks()[0];
+    videoTrack.enabled = false;
+    localVideoTrackEnabled = false;
+
+    setTimeout(function () { 
+        peerConnection.close();
+    }, 500);
 }
 
 

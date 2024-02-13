@@ -6,7 +6,7 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.firestore();
 
 window.createRoom = function() {
-    const roomId = String(Math.floor(Math.random() * 1000000000).toString());
+    const roomId = String(Math.floor(Math.random() * 1000000).toString());
     window.location.href = `room.html?room=${roomId}`;
 }
 
