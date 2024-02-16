@@ -102,7 +102,12 @@ async function init() {
 
     dataChannel.addEventListener("close", (event) => {
         console.log("DATA CHANNEL CLOSED")
+
         document.getElementById("connection-info-msg").innerHTML = "call finished";
+        alert("Call finished")
+        setTimeout(function () {
+            window.location.href = `index.html`;
+        }, 2500);
     });
 
     dataChannel.addEventListener("error", (event) => {
@@ -318,7 +323,7 @@ window.endCall = async function () {
     videoTrack.enabled = false;
     localVideoTrackEnabled = false;
 
-    setTimeout(function () { 
+    setTimeout(function () {
         peerConnection.close();
     }, 500);
 }
