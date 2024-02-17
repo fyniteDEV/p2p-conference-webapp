@@ -105,9 +105,7 @@ async function init() {
 
         document.getElementById("connection-info-msg").innerHTML = "call finished";
         alert("Call finished")
-        setTimeout(function () {
-            window.location.href = `index.html`;
-        }, 2500);
+        window.location.href = `index.html`;
     });
 
     dataChannel.addEventListener("error", (event) => {
